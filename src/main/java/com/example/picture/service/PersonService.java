@@ -1,11 +1,8 @@
 package com.example.picture.service;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
 import com.example.picture.data_layer.DataContext;
 import com.example.picture.model.Person;
 

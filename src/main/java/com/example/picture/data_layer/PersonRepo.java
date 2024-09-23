@@ -23,9 +23,9 @@ public class PersonRepo implements DataContext {
     }
 
     @Override
-    public Optional<Person> selectFromDB(String data) {
+    public Optional<Person> selectFromDB(String name) {
         for(var item: people) {
-            if(item.name().equals(data)) {
+            if(item.name().equals(name)) {
                 return Optional.of(item);
             }
         }
