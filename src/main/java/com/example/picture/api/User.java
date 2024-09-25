@@ -18,8 +18,11 @@ public class User {
     PersonService service;
 
     @GetMapping
-    public void login(@Parameter String name) {
-        System.out.println(name);
+    public ResponseEntity<String> login(@Parameter String name) {
+        if (service.login(name) == true) {
+            return ResponseEntity.ok().body("Successful login!");
+        }
+        return ResponseEntity.badRequest().body("Wrong credentials!");
     }
 
     public User(DataContext context, PersonService service) {

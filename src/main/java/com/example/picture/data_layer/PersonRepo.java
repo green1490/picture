@@ -29,7 +29,7 @@ public class PersonRepo implements DataContext {
                 return Optional.of(item);
             }
         }
-        return Optional.of(null);
+        return Optional.empty();
     }
 
     @Override
