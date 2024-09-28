@@ -2,7 +2,7 @@ package com.example.picture;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -14,21 +14,17 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfiguration {
     
     @Bean
 	//enables form Login and HTTP basic auth
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			// restricts urls
-			.authorizeHttpRequests((authorize) -> authorize
-			// any request is authenticated	
-			.anyRequest().authenticated()
-			)
-			.httpBasic(Customizer.withDefaults())
-			.formLogin(Customizer.withDefaults());
-
-		return http.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+		return httpSecurity.authorizeHttpRequests( registry -> {
+			registry.requestMatchers("api/list/*").hasRole("ADMIN");
+			registry.requestMatchers("/").anonymous();
+		})
+		.build();
 	}
 
     @Bean
@@ -41,6 +37,13 @@ public class SecurityConfiguration {
 			.roles("USER")
 			.build();
 
-		return new InMemoryUserDetailsManager(userDetails);
+		@SuppressWarnings("deprecation")
+		UserDetails adminDetails = User.withDefaultPasswordEncoder()
+			.username("admin")
+			.password("admin")
+			.roles("ADMIN")
+			.build();
+
+		return new InMemoryUserDetailsManager(userDetails,adminDetails);
 	}
 }

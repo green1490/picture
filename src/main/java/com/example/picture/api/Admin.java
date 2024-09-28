@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,12 +21,14 @@ public class Admin {
         this.context = context;
     }
 
-    @GetMapping("/list/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("api/list/users")
     public ResponseEntity<ArrayList<Person>> registeredUser() {
         return ResponseEntity.ok(context.selectAll());
     }
 
-    @GetMapping("/list/{user}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("api/list/{user}")
     public ResponseEntity<String> userPassword(@Parameter String user) {
         Optional<Person> person = context.selectFromDB(user);
         if (person.isPresent()) {
