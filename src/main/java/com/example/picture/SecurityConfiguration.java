@@ -23,6 +23,10 @@ public class SecurityConfiguration {
 		return httpSecurity.authorizeHttpRequests( registry -> {
 			registry.requestMatchers("api/list/*").hasRole("ADMIN");
 			registry.requestMatchers("/").anonymous();
+			registry.requestMatchers("/swagger-ui/*").anonymous();
+			registry.requestMatchers("/v3/**").anonymous();
+			registry.requestMatchers("/login").anonymous();
+			registry.anyRequest().authenticated();
 		})
 		.build();
 	}
